@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/data/jpa 
+		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+		http://www.springframework.org/schema/jms
+        http://www.springframework.org/schema/jms/spring-jms.xsd
+		http://activemq.apache.org/schema/core
+        http://activemq.apache.org/schema/core/activemq-core.xsd">
+	
+	
+	<!-- 
+	1 配置connectionFactory 工厂
+	2 配置CachingConnectionFactory工厂 
+	3 配置JmsTemplete消息模板对象Queue
+	4 配置JmsTemplete消息模板对象Topic
+	 -->
+	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<!-- 程序访问activeMQ的地址    tcp://IP地址:61616 -->
+		<property name="brokerURL" value="tcp://localhost:61616"></property>
+		<property name="userName" value="admin"></property>
+		<property name="password" value="admin"></property>
+	</bean>
+	
+	<!-- <amq:connectionFactory id="connectionFactory" 
+		brokerURL="tcp://localhost:61616" userName="admin" password="admin"></amq:connectionFactory>
+	 -->
+	<bean id="cachingConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+		<property name="targetConnectionFactory" ref="connectionFactory"></property>
+	</bean>
+	
+	<!-- 配置模板 :队列-->
+	<bean id="queueTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<!-- pubsundomain:默认值是false，表示是p2p模式，当他的值是true的时候，表明是广播/主题模式 -->
+		<property name="pubSubDomain" value="false"></property>
+		<property name="connectionFactory" ref="cachingConnectionFactory"></property>
+	</bean>
+	<!-- 配置pubsub的模板 -->
+	<bean id="topicTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="pubSubDomain" value="true"></property>
+		<property name="connectionFactory" ref="cachingConnectionFactory"></property>
+	</bean>
+	
+	
+</beans>
+
+
+
+
+
+
+

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<constant name="struts.ui.theme" value="simple"/>
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<!-- 船运模块 -->
+	<package name="cargo" namespace="/cargo" extends="default">
+		
+		<action name="contractAction_*" method="{1}" class="contractAction">
+			<result name="success" type="redirectAction">contractAction_list</result>
+			<result name="list">/WEB-INF/pages/cargo/contract/jContractList.jsp</result>
+			<result name="tocreate">/WEB-INF/pages/cargo/contract/jContractCreate.jsp</result>
+			<result name="toupdate">/WEB-INF/pages/cargo/contract/jContractUpdate.jsp</result>
+			<result name="toview">/WEB-INF/pages/cargo/contract/jContractView.jsp</result>
+		</action>
+			
+		<action name="contractProductAction_*" method="{1}" class="contractProductAction">
+			<result name="tocreate">/WEB-INF/pages/cargo/contract/jContractProductCreate.jsp</result>
+			<result name="success" type="redirectAction">contractProductAction_tocreate?contract.id=${model.contract.id}</result>
+			<!-- <result name="success" type="redirect">contractProductAction_tocreate?contract.id=${model.getContract().getId()}</result>-->			
+			<result name="toupdate">/WEB-INF/pages/cargo/contract/jContractProductUpdate.jsp</result>
+		</action>	
+		
+		<action name="extCproductAction_*" method="{1}" class="extCproductAction">
+			<result name="tocreate">/WEB-INF/pages/cargo/contract/jExtCproductCreate.jsp</result>
+			<result name="success" type="redirectAction">extCproductAction_tocreate?contractProduct.id=${model.contractProduct.id}</result>	
+			<result name="toupdate">/WEB-INF/pages/cargo/contract/jExtCproductUpdate.jsp</result>
+			
+		</action>
+		
+		<!-- 配置出货表的Action -->
+		<action name="outProductAction_*" class="outProductAction" method="{1}">
+			<result name="toedit">/WEB-INF/pages/cargo/outproduct/jOutProduct.jsp</result>
+		
+		</action>
+		
+		
+		<action name="exportAction_*" method="{1}" class="exportAction">
+			<result name="contractList">/WEB-INF/pages/cargo/export/jContractList.jsp</result>
+			<result name="success" type="redirectAction">exportAction_list</result>
+			<result name="list">/WEB-INF/pages/cargo/export/jExportList.jsp</result>
+			<result name="tocreate">/WEB-INF/pages/cargo/export/jExportCreate.jsp</result>
+			<result name="toupdate">/WEB-INF/pages/cargo/export/jExportUpdate.jsp</result>
+			<result name="toview">/WEB-INF/pages/cargo/export/jExportView.jsp</result>
+		</action>
+		
+		
+		<action name="poiAction_*" method="{1}" class="poiAction">
+			<result name="toImport">/WEB-INF/pages/cargo/poiimport/jPoiImport.jsp</result>
+		
+		</action>
+		
+		<action name="pdfAction_*" method="{1}" class="pdfAction"></action>
+		
+		
+		
+			
+		
+	</package>
+
+	<!-- <package name="" namespace="/cargo/export"></package> -->
+	
+	
+</struts>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<constant name="struts.ui.theme" value="simple"/>
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<!-- 统计分析模块 -->
+	<package name="stat" namespace="/stat" extends="default">
+		<action name="statChartAction_*" method="{1}" class="statChartAction">
+		    <!-- 
+		   1 静态资源无法通过请求转发的方式访问！！！！！！ 
+		         如何解决呢？
+		         解决方案一：将静态页面改成*.jsp页面，并且在页面中加入jsp页面需要的头信息
+		         解决方案二：   重定向跳转   
+		   2 :如果访问了静态的资源，浏览器会缓存，如果没有效果，要记得清浏览器缓存 
+		    
+		    
+		    -->
+			<result name="factorysale" type="redirect">/stat/chart/factorysale/index.html</result>
+			<result name="productsale" type="redirect">/stat/chart/productsale/index.html</result>
+			<result name="productsaleJson">/WEB-INF/pages/stat/column3D.jsp</result>
+			<result name="onlineInfoJson">/WEB-INF/pages/stat/line.jsp</result>
+			<result name="onlineInfoHcharts">/WEB-INF/pages/stat/hcharts.jsp</result>
+			<result name="echarts">/WEB-INF/pages/stat/echarts.jsp</result>
+			
+		</action>
+	</package>
+
+	
+	
+</struts>

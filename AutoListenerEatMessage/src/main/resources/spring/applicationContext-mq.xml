@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/data/jpa 
+		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+		http://www.springframework.org/schema/jms
+        http://www.springframework.org/schema/jms/spring-jms.xsd
+		http://activemq.apache.org/schema/core
+        http://activemq.apache.org/schema/core/activemq-core.xsd">
+	
+	<!-- 配置的Bean -->
+	<bean id="queueListener01" class="cn.itcast.listener.QueueListener01"></bean>
+	<bean id="topicListener02" class="cn.itcast.listener.TopicListener02"></bean>
+	<bean id="topicListener03" class="cn.itcast.listener.TopicListener03"></bean>
+	<!-- 定义消息消费方法，运行在独立的tomcat服务器上 -->
+	<!-- connectionFactory -->
+	<amq:connectionFactory id="connectionFactory"></amq:connectionFactory>
+	
+	<!-- cachingConnectionFactory -->
+	<bean id="cachingConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+		<!-- 配置缓存中默认的连接个数 -->
+		<property name="sessionCacheSize" value="20"></property>
+		<property name="targetConnectionFactory" ref="connectionFactory"></property>
+	</bean>
+	
+	<!-- 监听器监听的方式消费消息 ,自动监听消息的消费
+		你这个监听器，是监听队列还是主题的，主要看destination-type="queue"配置
+	
+	-->
+	<jms:listener-container connection-factory="cachingConnectionFactory" destination-type="queue">
+		<!-- 
+		    destination： 监听的队列名
+		    ref：消费的名字
+		 -->
+		<jms:listener destination="itheima18" ref="queueListener01"/>
+	</jms:listener-container>
+	
+	<!-- 监听广播模式的消费 -->
+	<jms:listener-container connection-factory="cachingConnectionFactory" destination-type="topic">
+		<jms:listener destination="itheima18" ref="topicListener02"/>
+		<jms:listener destination="itheima18" ref="topicListener03"/>
+	</jms:listener-container>
+	
+	
+</beans>
+
+
+
+
